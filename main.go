@@ -13,14 +13,18 @@ const EUR = "EUR"
 const RUB = "RUB"
 
 func main() {
-	currency := map[string]map[string]float64{
+	currency := map[string]map[string]float32{
 		USD: {USD: 1.0, EUR: USDinEUR, RUB: USDinRUB},
 		EUR: {USD: 100 / USDinEUR, EUR: 1.0, RUB: EURinRUB},
 		RUB: {USD: 100 / USDinRUB, EUR: 100 / EURinRUB, RUB: 1.0},
 	}
-	value, originalCurrency, targetCurrency := getUserInput()
-	result := value * float32(currency[originalCurrency][targetCurrency])
+	result := calc(&currency)
 	fmt.Printf("%.2f", result)
+}
+
+func calc(currency *map[string]map[string]float32) float32 {
+	value, originalCurrency, targetCurrency := getUserInput()
+	return value * (*currency)[originalCurrency][targetCurrency]
 }
 
 func getUserInput() (float32, string, string) {
