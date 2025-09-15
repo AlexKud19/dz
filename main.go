@@ -45,17 +45,13 @@ func getUserInput() (float32, string, string) {
 		}
 		break
 	}
-	possibleOptions := ""
-	switch originalCurrency {
-	case USD:
-		possibleOptions = "EUR, RUB"
-	case EUR:
-		possibleOptions = "USD, RUB"
-	default:
-		possibleOptions = "USD, EUR"
+	possibleOptions := map[string]string{
+		USD: "EUR, RUB",
+		EUR: "USD, RUB",
+		RUB: "USD, EUR",
 	}
 	for {
-		currency, err := getCurrencyInput(fmt.Sprintf("Введите валюту для конвертации: (варианты: %v): ", possibleOptions))
+		currency, err := getCurrencyInput(fmt.Sprintf("Введите валюту для конвертации: (варианты: %v): ", possibleOptions[originalCurrency]))
 		targetCurrency = currency
 		if err != nil {
 			fmt.Println(err)
