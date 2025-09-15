@@ -13,8 +13,13 @@ const EUR = "EUR"
 const RUB = "RUB"
 
 func main() {
+	currency := map[string]map[string]float64{
+		USD: {USD: 1.0, EUR: USDinEUR, RUB: USDinRUB},
+		EUR: {USD: 100 / USDinEUR, EUR: 1.0, RUB: EURinRUB},
+		RUB: {USD: 100 / USDinRUB, EUR: 100 / EURinRUB, RUB: 1.0},
+	}
 	value, originalCurrency, targetCurrency := getUserInput()
-	result := convert(value, originalCurrency, targetCurrency)
+	result := value * float32(currency[originalCurrency][targetCurrency])
 	fmt.Printf("%.2f", result)
 }
 
@@ -79,38 +84,4 @@ func getCurrencyCountInput(str string) (float32, error) {
 		return 0, errors.New("Введенное значение должно быть положительным числом")
 	}
 	return currencyCount, nil
-}
-
-func convert(value float32, originalCurrency string, targetCurrency string) float32 {
-	var result float32
-	switch originalCurrency {
-	case USD:
-		switch targetCurrency {
-		case RUB:
-			result = value * USDinRUB
-		case EUR:
-			result = value * USDinEUR
-		default:
-			result = value
-		}
-	case EUR:
-		switch targetCurrency {
-		case RUB:
-			result = value * EURinRUB
-		case USD:
-			result = value / USDinEUR
-		default:
-			result = value
-		}
-	default:
-		switch targetCurrency {
-		case EUR:
-			result = value / EURinRUB
-		case USD:
-			result = value / USDinRUB
-		default:
-			result = value
-		}
-	}
-	return result
 }
